@@ -9,11 +9,11 @@ library(htmlwidgets)
 library(zoo)
 library(forecast)
 
-##¸ô®|³]©w
+##è·¯å¾‘è¨­å®š
 dir = "~"
 setwd(dir)
 
-##Åª¨úÀÉ®×
+##è®€å–æª”æ¡ˆ
 file.list_mask <- list.files(pattern="*.csv")
 mask_count_view <- lapply(file.list_mask, function(mask_count){
   mask_count <- read.csv(mask_count, fileEncoding = "UTF-8")
@@ -28,20 +28,20 @@ mask_count_view_re_sort$date <- mask_count_view_re_sort$date %>% as.Date()
 
 weekdate<- read.csv("~/WEEKDATE.csv", colClasses = c("Date","character")) %>%
   filter(between(date,as.Date("2017-01-01"),Sys.Date())) 
-colnames(weekdate) <- c("date","¦~¶g")
+colnames(weekdate) <- c("date","WEEKDATE")
 
-##©Ò¦³¸ê®Æ¡B¥ş°ê¨C¶g¡B¦U¿¤¥«¨C¶g¡B¥ş°ê²Ö­p
+##æ‰€æœ‰è³‡æ–™ã€å…¨åœ‹æ¯é€±ã€å„ç¸£å¸‚æ¯é€±ã€å…¨åœ‹ç´¯è¨ˆ
 mask_count_view_re_sort_week <- left_join(mask_count_view_re_sort, weekdate, by="date")
-mask_count_taiwan<-mask_count_view_re_sort_week %>% group_by(¦~¶g) %>% summarise(count = sum(count))%>% as.data.frame()
-mask_count_single<-mask_count_view_re_sort_week %>% group_by(¦~¶g, counties) %>% summarise(count = sum(count)) %>% as.data.frame()
+mask_count_taiwan<-mask_count_view_re_sort_week %>% group_by(WEEKDATE) %>% summarise(count = sum(count))%>% as.data.frame()
+mask_count_single<-mask_count_view_re_sort_week %>% group_by(WEEKDATE, counties) %>% summarise(count = sum(count)) %>% as.data.frame()
 mask_count_country_sum <- mask_count_view_re_sort_week %>% group_by(counties) %>% summarise(count = sum(count))%>% as.data.frame()
 
 
 path = paste0("~")
-write.xlsx(mask_count_view_re_sort, path, row.names = FALSE, sheetName = "¥ş³¡¸ê®Æ")
-write.xlsx(mask_count_taiwan, path, row.names = FALSE, sheetName = "¥ş°ê¨C©P¸ê®Æ", append=TRUE)
-write.xlsx(mask_count_single, path, row.names = FALSE, sheetName = "¦U¿¤¥«¨C©P¸ê®Æ", append=TRUE)
-write.xlsx(mask_count_country_sum, path, row.names = FALSE, sheetName = "¥ş°ê²Ö¿n¼Æ¶q", append=TRUE)
+write.xlsx(mask_count_view_re_sort, path, row.names = FALSE, sheetName = "å…¨éƒ¨è³‡æ–™")
+write.xlsx(mask_count_taiwan, path, row.names = FALSE, sheetName = "å…¨åœ‹æ¯å‘¨è³‡æ–™", append=TRUE)
+write.xlsx(mask_count_single, path, row.names = FALSE, sheetName = "å„ç¸£å¸‚æ¯å‘¨è³‡æ–™", append=TRUE)
+write.xlsx(mask_count_country_sum, path, row.names = FALSE, sheetName = "å…¨åœ‹ç´¯ç©æ•¸é‡", append=TRUE)
 
 
 
